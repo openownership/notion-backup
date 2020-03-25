@@ -30,7 +30,8 @@ jobs:
         NOTION_LOCALE: en
         NOTION_TIMEZONE: 'Europe/London'
         NOTION_SPACE_ID: ${{ secrets.NOTION_SPACE_ID }}
-        NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        NOTION_EMAIL: ${{ secrets.NOTION_EMAIL }}
+        NOTION_PASSWORD: ${{ secrets.NOTION_PASSWORD }}
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"

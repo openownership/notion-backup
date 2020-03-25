@@ -24,23 +24,26 @@ The code to run the backup lives in [/notion/export_notion.py]. To run it:
    touch .env
    ```
 
-2. Set your `NOTION_TOKEN` and `NOTION_SPACE_ID` in the `.env` file:
+2. Set your `NOTION_SPACE_ID`, `NOTION_EMAIL` and `NOTION_PASSWORD` in the
+   `.env` file:
 
    ```shell
-   NOTION_TOKEN=<your-token_v2>
-   NOTION_SPACE_ID=<your-space-id>
+   NOTION_SPACE_ID=1234-56789-abcdef
+   NOTION_EMAIL=notion@example.com
+   NOTION_PASSWORD=password
    ```
 
 3. Run the python module: `python notion`
 
-You can find the space id and token by logging into Notion (as the tech+notion
-user ideally, if you use your personal account it will also export files in your
-personal workspace) and then inspecting one of the ajax requests that notion's
-front end makes. `token_v2` is a cookie, `spaceId` is often found in the body
-of responses from Notion.
+You can find the space id by logging into Notion as the tech+notion user and then
+inspecting one of the ajax requests that notion's front end makes in the
+chrome dev console. It's often found in the body of responses from Notion.
+
+Note that this assumes you have a email/password user account, not one through
+Google SSO.
 
 ## Github Action config
 
-The Github Action is configured via NOTION_TOKEN and NOTION_SPACE_ID secrets set
-up in [the repo settings](https://github.com/openownership/notion-backup/settings/secrets).
+The Github Action is configured via `NOTION_EMAIL`, `NOTION_PASSWORD` and
+`NOTION_SPACE_ID` secrets set up in [the repo settings](https://github.com/openownership/notion-backup/settings/secrets).
 These are then set as env vars for the python script to use.

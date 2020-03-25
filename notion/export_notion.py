@@ -9,8 +9,21 @@ from notion.client import NotionClient
 from dotenv import load_dotenv
 
 
-if os.getenv('GITHUB_WORKFLOW') is None:
-    load_dotenv()
+load_dotenv()
+
+
+def notionToken():
+    loginData = {
+        'email': os.getenv('NOTION_EMAIL'),
+        'password': os.getenv('NOTION_PASSWORD')
+    }
+    headers = {
+        # Notion obviously check this as some kind of (bad) test of CSRF
+        'host': 'www.notion.so'
+    }
+    response = requests.post('https://notion.so/api/v3/loginWithEmail', json=loginData, headers=headers)
+    response.raise_for_status()
+    return response.cookies['token_v2']
 
 
 def exportTask():
@@ -60,7 +73,8 @@ def extractFile(filename, folder):
 
 
 def main():
-    client = NotionClient(token_v2=os.getenv('NOTION_TOKEN'))
+    token = notionToken()
+    client = NotionClient(token_v2=token)
     taskId = client.post('enqueueTask', exportTask()).json().get('taskId')
     url = exportUrl(client, taskId)
     downloadFile(url, 'export.zip')
