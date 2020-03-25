@@ -23,6 +23,7 @@ jobs:
     - name: Clear backup folder
       run: |
         rm -rf backup/*
+        git checkout backup/.gitkeep
     - name: Download backup
       run: python notion
       env:
@@ -34,7 +35,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git diff --quiet && git diff --staged --quiet || (git add backup/* && git commit -m "Update by GitHub Action")
+        [ -n "$(git status --porcelain)" ] && (git add backup/* && git commit -m "Update by GitHub Action")
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
