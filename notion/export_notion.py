@@ -2,9 +2,13 @@ import os
 import shutil
 from zipfile import ZipFile
 import time
+from pathlib import Path
 
 import requests
 from notion.client import NotionClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def exportTask():

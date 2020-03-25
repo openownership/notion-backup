@@ -2,3 +2,4 @@
 venv
 export.zip
 __pycache__
+.env

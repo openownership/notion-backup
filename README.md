@@ -1,7 +1,6 @@
 # Notion Backup
 
-This repo stores a backup of OpenOwnership's Notion workspace:
-https://www.notion.so/openownership/OpenOwnership-Home-e6298eada76f4535bc2ea177ba79413e
+This repo stores a backup of [OpenOwnership's Notion workspace](https://www.notion.so/openownership/OpenOwnership-Home-e6298eada76f4535bc2ea177ba79413e)
 and the code which makes that backup and regularly updates it.
 
 The backup itself is in [/backup](https://github.com/openownership/notion-backup/tree/master/backup)
@@ -14,14 +13,25 @@ day, as well as whenever code is pushed to the repository.
 
 The code to run the backup lives in [/notion/export_notion.py]. To run it:
 
-```
-pip install -r requirements.txt
-export NOTION_LOCALE=en
-export NOTION_TIMEZONE=Europe/London
-export NOTION_SPACE_ID=<our-notion-space-id>
-export NOTION_TOKEN=<tech+notion@openownership.org's token_v2>
-python notion
-```
+1. Install requirements
+
+   ```shell
+   git clone git@github.com:openownership/notion-backup.git
+   cd notion-backup
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   touch .env
+   ```
+
+2. Set your `NOTION_TOKEN` and `NOTION_SPACE_ID` in the `.env` file:
+
+   ```shell
+   NOTION_TOKEN=<your-token_v2>
+   NOTION_SPACE_ID=<your-space-id>
+   ```
+
+3. Run the python module: `python notion`
 
 You can find the space id and token by logging into Notion (as the tech+notion
 user ideally, if you use your personal account it will also export files in your
@@ -31,6 +41,6 @@ of responses from Notion.
 
 ## Github Action config
 
-The Github Action is configured via some secrets set up in the repo:
-https://github.com/openownership/notion-backup/settings/secrets. These are then
-set as env vars for the python script to use.
+The Github Action is configured via NOTION_TOKEN and NOTION_SPACE_ID secrets set
+up in [the repo settings](https://github.com/openownership/notion-backup/settings/secrets).
+These are then set as env vars for the python script to use.
