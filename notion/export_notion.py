@@ -8,7 +8,9 @@ import requests
 from notion.client import NotionClient
 from dotenv import load_dotenv
 
-load_dotenv()
+
+if os.getenv('GITHUB_WORKFLOW') is None:
+    load_dotenv()
 
 
 def exportTask():
@@ -16,11 +18,11 @@ def exportTask():
         'task': {
             'eventName': "exportSpace",
             'request': {
-                'spaceId': os.environ['NOTION_SPACE_ID'],
+                'spaceId': os.getenv('NOTION_SPACE_ID'),
                 'exportOptions': {
                     'exportType': 'markdown',
-                    'timeZone': os.environ['NOTION_TIMEZONE'],
-                    'locale': os.environ['NOTION_LOCALE']
+                    'timeZone': os.getenv('NOTION_TIMEZONE'),
+                    'locale': os.getenv('NOTION_LOCALE')
                 }
             }
         }
@@ -58,7 +60,7 @@ def extractFile(filename, folder):
 
 
 def main():
-    client = NotionClient(token_v2=os.environ['NOTION_TOKEN'])
+    client = NotionClient(token_v2=os.getenv('NOTION_TOKEN'))
     taskId = client.post('enqueueTask', exportTask()).json().get('taskId')
     url = exportUrl(client, taskId)
     downloadFile(url, 'export.zip')
