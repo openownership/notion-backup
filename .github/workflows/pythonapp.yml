@@ -1,0 +1,41 @@
+name: Backup notion
+
+on:
+  push:
+  schedule:
+    - cron: '5 4 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Clear backup folder
+      run: |
+        rm -rf backup/*
+    - name: Download backup
+      run: python notion
+      env:
+        NOTION_LOCALE: en
+        NOTION_TIMEZONE: 'Europe/London'
+        NOTION_SPACE_ID: ${{ secrets.NOTION_SPACE_ID }}
+        NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git diff --quiet && git diff --staged --quiet || (git add backup/* && git commit -m "Update by GitHub Action")
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}

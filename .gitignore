@@ -1,0 +1,4 @@
+.vscode
+venv
+export.zip
+__pycache__
