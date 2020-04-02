@@ -20,11 +20,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Clear backup folder
-      run: |
-        rm -rf backup/*
-        git checkout backup/.gitkeep
-    - name: Download backup
+    - name: Download backup and push to GDrive
       run: python notion
       env:
         NOTION_LOCALE: en
@@ -32,12 +28,5 @@ jobs:
         NOTION_SPACE_ID: ${{ secrets.NOTION_SPACE_ID }}
         NOTION_EMAIL: ${{ secrets.NOTION_EMAIL }}
         NOTION_PASSWORD: ${{ secrets.NOTION_PASSWORD }}
-    - name: Commit files
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        [ -n "$(git status --porcelain)" ] && (git add backup/* && git commit -m "Update by GitHub Action")
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        GDRIVE_ROOT_FOLDER_ID: ${{ secrets.GDRIVE_ROOT_FOLDER_ID }}
+        GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
