@@ -20,7 +20,7 @@ python-dotenv==0.12.0
 python-slugify==4.0.0
 pytz==2019.3
 requests==2.23.0
-rsa==4.0
+rsa==4.1
 six==1.14.0
 soupsieve==2.0
 text-unidecode==1.3
